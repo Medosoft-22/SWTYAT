@@ -1,1 +1,1 @@
-kivy,vlc
+kivy
