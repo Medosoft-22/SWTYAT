@@ -1,0 +1,75 @@
+name: Build APK
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'  # Specify your Python version here
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y \
+          build-essential \
+          libffi-dev \
+          libssl-dev \
+          python3-pip \
+          python3-setuptools \
+          python3-wheel \
+          git \
+          unzip \
+          openjdk-11-jdk \
+          libncurses5 \
+          libncurses5-dev \
+          libsqlite3-dev \
+          zlib1g-dev \
+          libbz2-dev \
+          liblzma-dev \
+          libgdbm-dev \
+          libncursesw5-dev \
+          libreadline-dev \
+          libdb5.3-dev \
+          libffi-dev \
+          liblzma-dev \
+          zlib1g \
+          libsqlite3-dev \
+          libncurses5-dev \
+          libgdbm-dev \
+          libbz2-dev \
+          libssl-dev \
+          libffi-dev \
+          liblzma-dev \
+          libgdbm-dev \
+          libnss3 \
+          liblzma-dev \
+          liblzma-dev
+
+    - name: Install Python packages
+      run: |
+        pip install cython buildozer
+
+    - name: Build APK
+      run: |
+        buildozer init  # Initialize buildozer spec file if not already present
+        buildozer -v android debug  # Build the APK file
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: apk
+        path: bin/*.apk  # Path to the APK file
