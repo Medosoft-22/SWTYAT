@@ -1,1 +1,1 @@
-kivy,python-vlc
+kivy,vlc
